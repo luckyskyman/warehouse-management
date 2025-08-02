@@ -2,11 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "server/index.ts",
-      "use": "@vercel/node"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/public"
+      }
     },
     {
-      "src": "package.json",
+      "src": "server/index.ts",
       "use": "@vercel/node"
     }
   ],
@@ -17,13 +20,9 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/dist/$1"
+      "dest": "/dist/public/$1"
     }
   ],
   "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "buildCommand": "vite build"
 }
