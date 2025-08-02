@@ -1643,17 +1643,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // 현재 사용자 정보 조회 API
   app.get("/api/auth/me", async (req, res) => {
-    const sessionId = req.headers['x-session-id'] as string;
+    const sessionId = req.headers['authorization']?.replace('Bearer ', '') || 
+                     req.headers['sessionid'] || 
+                     req.headers['x-session-id'];
+    
+    console.log('Auth me request:', { 
+      sessionId: sessionId ? sessionId.substring(0, 20) + '...' : 'none',
+      hasSession: sessionId ? sessions.has(sessionId) : false,
+      totalSessions: sessions.size
+    });
     
     if (!sessionId) {
       return res.status(401).json({ message: "세션 ID가 필요합니다." });
     }
     
+    if (!sessions.has(sessionId)) {
+      return res.status(401).json({ message: "유효하지 않은 세션입니다." });
+    }
+    
     try {
-      const user = await storage.getUserBySession(sessionId);
-      if (!user) {
-        return res.status(401).json({ message: "유효하지 않은 세션입니다." });
-      }
+      const user = sessions.get(sessionId);
+      console.log('Auth me success:', { userId: user.id, username: user.username });
+      res.json(user);
       
       res.json(user);
     } catch (error) {
