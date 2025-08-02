@@ -40,19 +40,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const user = data.user || data;
       const sessionId = data.sessionId;
       
-      setUser(user);
-      setSessionId(sessionId);
+      // 즉시 localStorage에 저장
       localStorage.setItem('sessionId', sessionId);
       localStorage.setItem('username', user.username);
       localStorage.setItem('role', user.role);
       localStorage.setItem('warehouse_user', JSON.stringify(user));
       localStorage.setItem('warehouse_session', sessionId);
       
-      console.log('Login successful, user set:', user);
-      console.log('Session stored:', sessionId.substring(0, 20) + '...');
+      console.log('Login successful, setting user and session immediately');
+      console.log('User data:', user);
+      console.log('Session ID:', sessionId.substring(0, 20) + '...');
+      
+      // 상태 즉시 설정
+      setUser(user);
+      setSessionId(sessionId);
       
       // 로그인 시 권한별 캐시 무효화 (페이지 새로고침 없음)
       queryClient.clear(); // 전체 캐시 초기화로 권한 변경 즉시 반영
+      
+      console.log('Auth state updated - user should see dashboard now');
     } catch (error) {
       throw error instanceof Error ? error : new Error('로그인에 실패했습니다.');
     } finally {
@@ -97,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const savedUser = localStorage.getItem('warehouse_user');
     const savedSession = localStorage.getItem('warehouse_session') || localStorage.getItem('sessionId');
     
-    console.log('AuthProvider useEffect:', { 
+    console.log('AuthProvider useEffect - checking saved auth:', { 
       savedUser: !!savedUser, 
       savedSession: !!savedSession,
       sessionId: savedSession ? savedSession.substring(0, 20) + '...' : 'none'
@@ -106,9 +112,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (savedUser && savedSession) {
       try {
         const userData = JSON.parse(savedUser);
-        console.log('Attempting to restore session for user:', userData.username);
+        console.log('Found saved user data, restoring immediately:', userData.username);
         
-        // Verify session with server before setting auth state
+        // Set state immediately without verification for faster UX
+        setUser(userData);
+        setSessionId(savedSession);
+        
+        console.log('Auth state restored from localStorage - user should see dashboard');
+        
+        // Verify session in background (optional)
         fetch('/api/auth/me', {
           method: 'GET',
           headers: {
@@ -119,22 +131,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         })
         .then(response => {
-          console.log('Session verification response:', response.status);
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error(`Session verification failed: ${response.status}`);
+          if (!response.ok) {
+            throw new Error(`Session invalid: ${response.status}`);
           }
+          return response.json();
         })
         .then(serverUserData => {
-          console.log('Session verified successfully, setting auth state:', serverUserData.username);
-          setUser(serverUserData);
-          setSessionId(savedSession);
-          // Update localStorage with fresh data
-          localStorage.setItem('warehouse_user', JSON.stringify(serverUserData));
+          console.log('Background session verification successful');
+          // Update with fresh server data if different
+          if (JSON.stringify(userData) !== JSON.stringify(serverUserData)) {
+            setUser(serverUserData);
+            localStorage.setItem('warehouse_user', JSON.stringify(serverUserData));
+          }
         })
         .catch(error => {
-          console.log('Session verification failed, clearing auth state:', error.message);
+          console.log('Background session verification failed, clearing auth:', error.message);
           localStorage.removeItem('warehouse_user');
           localStorage.removeItem('sessionId');
           localStorage.removeItem('warehouse_session');
@@ -144,11 +155,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSessionId(null);
         });
       } catch (error) {
-        console.error('localStorage 파싱 에러:', error);
+        console.error('localStorage parsing error:', error);
         logout();
       }
     } else {
-      console.log('No saved user or session found');
+      console.log('No saved auth data found');
+      setUser(null);
+      setSessionId(null);
     }
   }, []);
 
