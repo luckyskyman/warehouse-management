@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: warehouse-management-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: postgresql://postgres.vwooowcepjnefjokxsqs:YOUR_SUPABASE_PASSWORD@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres
+      - key: SESSION_SECRET
+        generateValue: true
