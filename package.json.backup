@@ -44,6 +44,8 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@replit/vite-plugin-cartographer": "^1.10.6",
+    "@replit/vite-plugin-runtime-error-modal": "^1.0.4",
     "@tailwindcss/typography": "^0.5.13",
     "@tailwindcss/vite": "^4.0.0-alpha.18",
     "@tanstack/react-query": "^5.37.1",
