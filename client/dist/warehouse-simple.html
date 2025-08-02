@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창고 물품 재고 관리시스템</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab { padding: 12px 24px; margin-right: 4px; background: #f3f4f6; border: none; cursor: pointer; border-radius: 6px 6px 0 0; }
+        .tab.active { background: #7c3aed; color: white; }
+        .content { background: white; padding: 20px; border-radius: 0 6px 6px 6px; min-height: 400px; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-400 via-blue-500 to-blue-600 min-h-screen">
+    <div id="app">
+        <!-- Login Form -->
+        <div id="loginContainer" class="min-h-screen flex items-center justify-center">
+            <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md">
+                <div class="text-center mb-8">
+                    <div class="text-6xl mb-4">📦</div>
+                    <h1 class="text-2xl font-bold text-white mb-2">창고 물품 재고 관리시스템</h1>
+                    <p class="text-white/80">로그인하여 시스템에 접근하세요</p>
+                </div>
+                
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-white/90 font-medium mb-2">사용자명</label>
+                        <input type="text" id="username" placeholder="사용자명을 입력하세요" 
+                               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white/90 font-medium mb-2">비밀번호</label>
+                        <input type="password" id="password" placeholder="비밀번호를 입력하세요"
+                               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:to-purple-800 transition-all duration-200">
+                        로그인
+                    </button>
+                </form>
+                
+                <div id="error" class="mt-4 text-red-200 text-center hidden"></div>
+                
+                <div class="mt-6 text-center text-white/70 text-sm">
+                    <p>테스트 계정:</p>
+                    <p>관리자: admin / xormr</p>
+                    <p>조회자: viewer / viewer123</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard (initially hidden) -->
+        <div id="dashboard" class="hidden min-h-screen">
+            <div class="bg-gradient-to-r from-purple-600 to-purple-800 text-white p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold">창고 물품 재고 관리시스템</h1>
+                        <p id="userInfo" class="text-purple-100 mt-2"></p>
+                    </div>
+                    <button onclick="logout()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors">
+                        로그아웃
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 min-h-screen">
+                <div class="container mx-auto px-6 py-6">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div class="flex border-b">
+                            <button class="tab active" onclick="switchTab('bom')">⚙️ BOM 체커</button>
+                            <button class="tab" onclick="switchTab('inventory')">📦 재고관리</button>
+                            <button class="tab" onclick="switchTab('transactions')">📥📤 입출고관리</button>
+                            <button class="tab" onclick="switchTab('reports')">📊 보고서</button>
+                        </div>
+                        
+                        <div class="content" id="content">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">⚙️ BOM 체커</h3>
+                            <p class="text-gray-600 mb-6">설치가이드별 자재 확인 기능</p>
+                            
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold text-blue-800 mb-2">✅ 로그인 성공</h4>
+                                <p class="text-blue-700">창고관리시스템에 정상적으로 접속되었습니다.</p>
+                                <p class="text-sm text-blue-600 mt-1">각 탭을 클릭하여 다양한 기능을 확인하세요.</p>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-gray-800 mb-3">주요 기능</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li>• 설치가이드별 필요 부품 수량 확인</li>
+                                        <li>• 재고 현황과 대비한 부족 수량 계산</li>
+                                        <li>• Excel 파일 업로드 및 분석</li>
+                                        <li>• 실시간 재고 상태 모니터링</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-green-800 mb-3">시스템 상태</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <span class="w-3 h-3 bg-green-400 rounded-full mr-2"></span>
+                                            <span class="text-green-700">데이터베이스 연결 정상</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="w-3 h-3 bg-green-400 rounded-full mr-2"></span>
+                                            <span class="text-green-700">사용자 인증 완료</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="w-3 h-3 bg-green-400 rounded-full mr-2"></span>
+                                            <span class="text-green-700">시스템 준비 완료</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let sessionId = null;
+
+        // Check if already logged in
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedUser = localStorage.getItem('warehouse_user');
+            const savedSession = localStorage.getItem('warehouse_session');
+            
+            if (savedUser && savedSession) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    sessionId = savedSession;
+                    console.log('Restoring session for:', currentUser.username);
+                    showDashboard();
+                } catch (e) {
+                    console.log('Failed to restore session');
+                    localStorage.clear();
+                }
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error');
+            
+            errorDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || '로그인 실패');
+                }
+                
+                const data = await response.json();
+                currentUser = data.user;
+                sessionId = data.sessionId;
+                
+                localStorage.setItem('warehouse_user', JSON.stringify(data.user));
+                localStorage.setItem('warehouse_session', data.sessionId);
+                
+                console.log('Login successful for:', data.user.username);
+                showDashboard();
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            const userInfo = document.getElementById('userInfo');
+            userInfo.textContent = `사용자: ${currentUser.username} (${currentUser.role === 'super_admin' ? '관리자' : '사용자'})`;
+        }
+
+        function logout() {
+            localStorage.clear();
+            currentUser = null;
+            sessionId = null;
+            
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+            
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const content = document.getElementById('content');
+            switch(tab) {
+                case 'bom':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">⚙️ BOM 체커</h3>
+                        <p class="text-gray-600 mb-6">설치가이드별 자재 확인 기능</p>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-blue-800 mb-3">주요 기능</h4>
+                                <ul class="space-y-2 text-blue-700">
+                                    <li>✓ 설치가이드별 필요 부품 수량 확인</li>
+                                    <li>✓ 재고 현황과 대비한 부족 수량 계산</li>
+                                    <li>✓ Excel 파일 업로드 및 분석</li>
+                                    <li>✓ 실시간 재고 상태 모니터링</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-gray-800 mb-3">사용법</h4>
+                                <p class="text-gray-600">BOM 파일을 업로드하면 자동으로 재고와 대조하여 부족한 자재를 확인할 수 있습니다.</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'inventory':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">📦 재고관리</h3>
+                        <p class="text-gray-600 mb-6">제품 재고 현황 및 관리</p>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg text-center">
+                                <h4 class="font-bold text-green-800">전체 제품</h4>
+                                <p class="text-2xl font-bold text-green-600 mt-2">1,234</p>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                                <h4 class="font-bold text-yellow-800">부족 제품</h4>
+                                <p class="text-2xl font-bold text-yellow-600 mt-2">23</p>
+                            </div>
+                            <div class="bg-red-50 p-4 rounded-lg text-center">
+                                <h4 class="font-bold text-red-800">품절 제품</h4>
+                                <p class="text-2xl font-bold text-red-600 mt-2">5</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'transactions':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">📥📤 입출고관리</h3>
+                        <p class="text-gray-600 mb-6">제품 입고/출고 처리</p>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-blue-800 mb-3">📥 입고 관리</h4>
+                                <ul class="space-y-2 text-blue-700">
+                                    <li>• 제품 입고 등록 및 처리</li>
+                                    <li>• 바코드 스캔을 통한 빠른 입고</li>
+                                    <li>• 입고 수량 및 위치 자동 업데이트</li>
+                                </ul>
+                            </div>
+                            <div class="bg-red-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-red-800 mb-3">📤 출고 관리</h4>
+                                <ul class="space-y-2 text-red-700">
+                                    <li>• 제품 출고 처리 및 재고 차감</li>
+                                    <li>• 출고 요청 승인 프로세스</li>
+                                    <li>• 출고 후 재고 자동 업데이트</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'reports':
+                    content.innerHTML = `
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">📊 보고서</h3>
+                        <p class="text-gray-600 mb-6">재고 현황 및 분석 보고서</p>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-purple-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-purple-800 mb-3">통계 보고서</h4>
+                                <ul class="space-y-2 text-purple-700">
+                                    <li>• 일일/주간/월간 재고 현황</li>
+                                    <li>• 입출고 통계 및 분석</li>
+                                    <li>• 재고 회전율 분석</li>
+                                </ul>
+                            </div>
+                            <div class="bg-indigo-50 p-6 rounded-lg">
+                                <h4 class="font-bold text-indigo-800 mb-3">내보내기</h4>
+                                <ul class="space-y-2 text-indigo-700">
+                                    <li>• Excel 보고서 다운로드</li>
+                                    <li>• PDF 형태 보고서 생성</li>
+                                    <li>• 맞춤형 보고서 생성</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
