@@ -64,11 +64,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshUser = async () => {
-    if (!sessionId) return;
+    const currentSessionId = sessionId || localStorage.getItem('warehouse_session') || localStorage.getItem('sessionId');
+    if (!currentSessionId) return;
     
     try {
       const response = await fetch('/api/auth/me', {
-        headers: { 'x-session-id': sessionId }
+        headers: { 'x-session-id': currentSessionId }
       });
       
       if (response.ok) {
@@ -97,30 +98,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(userData);
         setSessionId(savedSession);
         
-        // 세션 복원 후 중요한 데이터 prefetch (BOM 데이터 포함)
-        setTimeout(async () => {
-          try {
-            await queryClient.prefetchQuery({ 
-              queryKey: ['/api/bom'],
-              queryFn: async () => {
-                const response = await fetch('/api/bom', {
-                  headers: { 'x-session-id': savedSession }
-                });
-                if (!response.ok) return [];
-                return response.json();
-              }
-            });
-          } catch (error) {
-            console.log('BOM 데이터 prefetch 실패:', error);
-          }
-        }, 100);
+        // 세션 복원 후 바로 대시보드 표시 (검증 없이)
+        console.log('Session restored successfully, user ready for dashboard');
       } catch (error) {
         console.error('localStorage 파싱 에러:', error);
-        localStorage.removeItem('sessionId');
-        localStorage.removeItem('username');
-        localStorage.removeItem('role');
-        localStorage.removeItem('warehouse_user');
-        localStorage.removeItem('warehouse_session');
+        logout();
       }
     } else {
       console.log('No saved user or session found');
