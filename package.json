@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
     "start": "NODE_ENV=production tsx server/index.ts",
-    "build": "vite build",
+    "build": "echo \"Server-only deployment - no build required\" && exit 0",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push"
   },
