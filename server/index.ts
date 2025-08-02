@@ -75,11 +75,11 @@ app.use((req, res, next) => {
   });
 
   // Serve static files
-  app.use(express.static('client/dist'));
+  app.use(express.static('dist/public'));
   
   // Serve React app for /app routes
   app.get('/app*', (_req, res) => {
-    res.sendFile('index.html', { root: 'client/dist' });
+    res.sendFile('index.html', { root: 'dist/public' });
   });
   
   // Backup routes for testing
@@ -98,7 +98,7 @@ app.use((req, res, next) => {
   
   // Serve login page for root and other routes
   app.get("*", (_req, res) => {
-    res.sendFile('index.html', { root: 'client/dist' });
+    res.sendFile('index.html', { root: 'dist/public' });
   });
 
   // Use Railway's PORT environment variable or fallback to 5000
