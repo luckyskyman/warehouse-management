@@ -78,17 +78,35 @@ const UserDropdown = () => {
 };
 
 export default function WarehouseManagement() {
-  const { user, logout, sessionId } = useAuth();
+  const { user, logout, sessionId, isLoading } = useAuth();
   const permissions = usePermissions();
   const [activeTab, setActiveTab] = useState<TabName>('bomCheck');
   const { toast } = useToast();
+
+  console.log('WarehouseManagement render:', { 
+    user: user ? { username: user.username, role: user.role } : null, 
+    sessionId: sessionId ? sessionId.substring(0, 20) + '...' : null,
+    isLoading,
+    shouldShowLogin: !user && !isLoading
+  });
+  
+  // Show loading state while auth is initializing
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-400 via-blue-500 to-blue-600 flex items-center justify-center">
+        <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-8">
+          <div className="text-white text-center">인증 중...</div>
+        </div>
+      </div>
+    );
+  }
 
   const { data: bomGuides = [] } = useQuery({
     queryKey: ['/api/bom'],
     enabled: !!user && !!sessionId
   });
 
-  const { data: workDiaries = [], refetch: refetchWorkDiaries } = useQuery({
+  const { data: workDiaries = [], refetch: refetchWorkDiaries } = useQuery<any[]>({
     queryKey: ['/api/work-diary'],
     enabled: !!user && !!sessionId
   });
@@ -192,7 +210,7 @@ export default function WarehouseManagement() {
       case 'workDiary':
         return (
           <WorkDiaryManagement 
-            workDiaries={workDiaries}
+            workDiaries={workDiaries || []}
             onCreateDiary={handleCreateWorkDiary}
             onUpdateDiary={handleUpdateWorkDiary}
             onDeleteDiary={handleDeleteWorkDiary}
@@ -318,7 +336,7 @@ export default function WarehouseManagement() {
       }
       
       // 해당 기간의 업무일지 필터링
-      const filteredDiaries = workDiaries.filter(diary => {
+      const filteredDiaries = (workDiaries || []).filter((diary: any) => {
         const diaryDate = new Date(diary.workDate);
         return diaryDate >= startDate && diaryDate <= endDate;
       });
@@ -349,7 +367,7 @@ export default function WarehouseManagement() {
       }, {});
 
       // 보고서 데이터 준비
-      const reportData = filteredDiaries.map(diary => ({
+      const reportData = filteredDiaries.map((diary: any) => ({
         '날짜': new Date(diary.workDate).toLocaleDateString('ko-KR'),
         '제목': diary.title,
         '카테고리': diary.category,
