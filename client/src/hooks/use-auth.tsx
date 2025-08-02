@@ -33,15 +33,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const data = await response.json();
-      setUser(data.user);
-      setSessionId(data.sessionId);
-      localStorage.setItem('sessionId', data.sessionId);
-      localStorage.setItem('username', data.user.username);
-      localStorage.setItem('role', data.user.role);
-      localStorage.setItem('warehouse_user', JSON.stringify(data.user));
-      localStorage.setItem('warehouse_session', data.sessionId);
       
-      console.log('Login successful, session stored:', data.sessionId.substring(0, 20) + '...');
+      // 로그인 응답 구조 확인
+      console.log('Login response data:', data);
+      
+      const user = data.user || data;
+      const sessionId = data.sessionId;
+      
+      setUser(user);
+      setSessionId(sessionId);
+      localStorage.setItem('sessionId', sessionId);
+      localStorage.setItem('username', user.username);
+      localStorage.setItem('role', user.role);
+      localStorage.setItem('warehouse_user', JSON.stringify(user));
+      localStorage.setItem('warehouse_session', sessionId);
+      
+      console.log('Login successful, user set:', user);
+      console.log('Session stored:', sessionId.substring(0, 20) + '...');
       
       // 로그인 시 권한별 캐시 무효화 (페이지 새로고침 없음)
       queryClient.clear(); // 전체 캐시 초기화로 권한 변경 즉시 반영
