@@ -95,6 +95,11 @@
           localStorage.setItem('warehouse_session', data.sessionId);
           
           console.log('Login successful, showing dashboard for:', data.user.username);
+          
+          // Hide login form immediately
+          document.getElementById('loginForm').style.display = 'none';
+          
+          // Show dashboard without any session validation
           showDashboard();
         } catch (error) {
           errorDiv.textContent = error.message;
@@ -103,7 +108,8 @@
       });
 
       function showDashboard() {
-        document.getElementById('root').innerHTML = `
+        // Ensure we completely replace the page content
+        document.body.innerHTML = `
           <div class="dashboard">
             <div class="header">
               <h1>창고 물품 재고 관리시스템</h1>
