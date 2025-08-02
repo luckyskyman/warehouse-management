@@ -10,7 +10,6 @@
     <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">창고관리시스템</h1>
-            <p class="text-gray-600">GitHub + Render + Supabase</p>
         </div>
         
         <form id="loginForm">
@@ -20,17 +19,6 @@
         </form>
         
         <div id="message" class="mt-4"></div>
-        
-        <div class="mt-6 pt-6 border-t border-gray-200 text-center">
-            <p class="text-gray-500 text-sm mb-2">테스트 계정:</p>
-            <p class="text-gray-600 text-sm">admin / xormr</p>
-            <p class="text-gray-600 text-sm">viewer / viewer123</p>
-        </div>
-        
-        <div class="mt-4 text-center">
-            <p class="text-green-600 text-sm">✅ Migration 성공 완료</p>
-            <p class="text-green-600 text-sm">✅ API & Database 연결됨</p>
-        </div>
     </div>
 
     <script>
@@ -49,14 +37,16 @@
                 
                 const data = await response.json();
                 
-                if (response.ok) {
-                    messageDiv.innerHTML = "<p class=\"text-green-600 text-sm\">로그인 성공!</p>";
-                    setTimeout(() => window.location.href = "/dashboard", 1000);
+                if (data.success) {
+                    messageDiv.innerHTML = '<p class="text-green-600">로그인 성공! 리다이렉트 중...</p>';
+                    setTimeout(() => {
+                        window.location.href = "/dashboard";
+                    }, 1000);
                 } else {
-                    messageDiv.innerHTML = "<p class=\"text-red-600 text-sm\">" + (data.message || "로그인 실패") + "</p>";
+                    messageDiv.innerHTML = '<p class="text-red-600">로그인 실패: ' + data.message + '</p>';
                 }
             } catch (error) {
-                messageDiv.innerHTML = "<p class=\"text-red-600 text-sm\">서버 연결 오류</p>";
+                messageDiv.innerHTML = '<p class="text-red-600">서버 연결 오류</p>';
             }
         });
     </script>
