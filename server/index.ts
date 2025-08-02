@@ -83,17 +83,21 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Serve index.html for all non-API routes (SPA support)
-  app.get("*", (req, res) => {
-    if (req.path.startsWith("/api")) {
-      return res.status(404).json({ message: "API endpoint not found" });
-    }
-    
-    // Try to serve index.html
+  // Specific route handlers for SPA
+  app.get("/dashboard", (req, res) => {
+    const dashboardPath = path.join(__dirname, '../client/dist/dashboard.html');
+    res.sendFile(dashboardPath, (err) => {
+      if (err) {
+        res.status(404).send('Dashboard page not found');
+      }
+    });
+  });
+
+  // Serve index.html for root route
+  app.get("/", (req, res) => {
     const indexPath = path.join(__dirname, '../client/dist/index.html');
     res.sendFile(indexPath, (err) => {
       if (err) {
-        // If no built frontend, show API information
         res.json({ 
           message: "Warehouse Management System API", 
           status: "Server running on Render",
@@ -111,6 +115,11 @@ app.use((req, res, next) => {
         });
       }
     });
+  });
+
+  // API 404 handler
+  app.get("/api/*", (req, res) => {
+    res.status(404).json({ message: "API endpoint not found" });
   });
 
   // Use Render's PORT environment variable or fallback to 5000
