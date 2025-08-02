@@ -28,17 +28,16 @@ export async function apiRequest(
   const headers: Record<string, string> = {
     'Cache-Control': 'no-cache',
     'Pragma': 'no-cache',
+    'Content-Type': 'application/json',
   };
-  
-  if (data) {
-    headers["Content-Type"] = "application/json";
-  }
 
   // Add session ID to headers if available (try both keys)
   const sessionId = localStorage.getItem('warehouse_session') || localStorage.getItem('sessionId');
   if (sessionId) {
     headers["x-session-id"] = sessionId;
-    console.log('Adding session header:', sessionId.substring(0, 20) + '...');
+    headers["Authorization"] = `Bearer ${sessionId}`;
+    headers["SessionId"] = sessionId;
+    console.log('Adding session headers:', sessionId.substring(0, 20) + '...');
   } else {
     console.log('No session ID found in localStorage');
   }
@@ -65,14 +64,20 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const sessionId = localStorage.getItem('warehouse_session') || localStorage.getItem('sessionId');
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
     
     if (sessionId) {
       headers["x-session-id"] = sessionId;
-      console.log('Query function adding session header:', sessionId.substring(0, 20) + '...');
+      headers["Authorization"] = `Bearer ${sessionId}`;
+      headers["SessionId"] = sessionId;
+      console.log('Query function adding session headers:', sessionId.substring(0, 20) + '...');
     } else {
       console.log('Query function: No session ID found');
     }
+
+    console.log('Fetching:', queryKey[0], 'with headers:', Object.keys(headers));
 
     const res = await fetch(queryKey[0] as string, {
       headers,
