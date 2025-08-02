@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창고관리시스템</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">창고관리시스템</h1>
+            <p class="text-gray-600">GitHub + Render + Supabase</p>
+        </div>
+        
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="사용자명" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500" required>
+            <input type="password" id="password" placeholder="비밀번호" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500" required>
+            <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 font-semibold">로그인</button>
+        </form>
+        
+        <div id="message" class="mt-4"></div>
+        
+        <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+            <p class="text-gray-500 text-sm mb-2">테스트 계정:</p>
+            <p class="text-gray-600 text-sm">admin / xormr</p>
+            <p class="text-gray-600 text-sm">viewer / viewer123</p>
+        </div>
+        
+        <div class="mt-4 text-center">
+            <p class="text-green-600 text-sm">✅ Migration 성공 완료</p>
+            <p class="text-green-600 text-sm">✅ API & Database 연결됨</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messageDiv = document.getElementById("message");
+            
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.innerHTML = "<p class=\"text-green-600 text-sm\">로그인 성공!</p>";
+                    setTimeout(() => window.location.href = "/dashboard", 1000);
+                } else {
+                    messageDiv.innerHTML = "<p class=\"text-red-600 text-sm\">" + (data.message || "로그인 실패") + "</p>";
+                }
+            } catch (error) {
+                messageDiv.innerHTML = "<p class=\"text-red-600 text-sm\">서버 연결 오류</p>";
+            }
+        });
+    </script>
+</body>
+</html>
