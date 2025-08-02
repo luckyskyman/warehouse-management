@@ -1,5 +1,10 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const log = (message: string) => {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -66,6 +71,10 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
+  // Serve static files from client/dist if available
+  const staticPath = path.join(__dirname, '../client/dist');
+  app.use(express.static(staticPath));
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -74,25 +83,37 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // API-only server for Railway deployment
-  app.get("*", (_req, res) => {
-    res.json({ 
-      message: "Warehouse Management System API", 
-      status: "Server running on Railway",
-      version: "1.0.0",
-      endpoints: {
-        auth: "/api/auth",
-        inventory: "/api/inventory", 
-        bom: "/api/bom",
-        warehouse: "/api/warehouse",
-        users: "/api/users",
-        workdiary: "/api/work-diary",
-        files: "/api/files"
+  // Serve index.html for all non-API routes (SPA support)
+  app.get("*", (req, res) => {
+    if (req.path.startsWith("/api")) {
+      return res.status(404).json({ message: "API endpoint not found" });
+    }
+    
+    // Try to serve index.html
+    const indexPath = path.join(__dirname, '../client/dist/index.html');
+    res.sendFile(indexPath, (err) => {
+      if (err) {
+        // If no built frontend, show API information
+        res.json({ 
+          message: "Warehouse Management System API", 
+          status: "Server running on Render",
+          version: "1.0.0",
+          note: "Frontend build not available",
+          endpoints: {
+            auth: "/api/auth",
+            inventory: "/api/inventory", 
+            bom: "/api/bom",
+            warehouse: "/api/warehouse",
+            users: "/api/users",
+            workdiary: "/api/work-diary",
+            files: "/api/files"
+          }
+        });
       }
     });
   });
 
-  // Use Railway's PORT environment variable or fallback to 5000
+  // Use Render's PORT environment variable or fallback to 5000
   const port = process.env.PORT || 5000;
   server.listen({
     port,
