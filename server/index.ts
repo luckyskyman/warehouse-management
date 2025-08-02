@@ -13,7 +13,7 @@ const log = (message: string) => {
 
 const app = express();
 
-// Enable CORS for all requests with more permissive settings
+// Enable CORS and security headers
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   res.header('Access-Control-Allow-Origin', origin || '*');
@@ -21,6 +21,20 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-session-id, Cache-Control, Pragma, Expires');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Max-Age', '86400');
+  
+  // Set CSP headers for production
+  if (process.env.NODE_ENV === 'production') {
+    res.header('Content-Security-Policy', 
+      "default-src 'self'; " +
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com; " +
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+      "font-src 'self' https://fonts.gstatic.com data:; " +
+      "img-src 'self' data: blob:; " +
+      "connect-src 'self' https://warehouse-management-lbwk.onrender.com; " +
+      "frame-src 'none'; " +
+      "object-src 'none';"
+    );
+  }
   
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
