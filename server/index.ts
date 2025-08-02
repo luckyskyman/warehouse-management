@@ -1,6 +1,15 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+
+const log = (message: string) => {
+  const formattedTime = new Date().toLocaleTimeString("en-US", {
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  console.log(`${formattedTime} [express] ${message}`);
+};
 
 const app = express();
 
@@ -65,19 +74,26 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
+  // API-only server for Railway deployment
+  app.get("*", (_req, res) => {
+    res.json({ 
+      message: "Warehouse Management System API", 
+      status: "Server running on Railway",
+      version: "1.0.0",
+      endpoints: {
+        auth: "/api/auth",
+        inventory: "/api/inventory", 
+        bom: "/api/bom",
+        warehouse: "/api/warehouse",
+        users: "/api/users",
+        workdiary: "/api/work-diary",
+        files: "/api/files"
+      }
+    });
+  });
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
+  // Use Railway's PORT environment variable or fallback to 5000
+  const port = process.env.PORT || 5000;
   server.listen({
     port,
     host: "0.0.0.0",
