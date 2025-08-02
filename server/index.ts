@@ -1,10 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const log = (message: string) => {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -71,10 +66,6 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  // Serve static files from client/dist if available
-  const staticPath = path.join(__dirname, '../client/dist');
-  app.use(express.static(staticPath));
-
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -83,46 +74,25 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Specific route handlers for SPA
-  app.get("/dashboard", (req, res) => {
-    const dashboardPath = path.join(__dirname, '../client/dist/dashboard.html');
-    res.sendFile(dashboardPath, (err) => {
-      if (err) {
-        res.status(404).send('Dashboard page not found');
-      }
-    });
+  // Serve static files
+  app.use(express.static('client/dist'));
+  
+  // Serve React app for /app routes
+  app.get('/app*', (_req, res) => {
+    res.sendFile('app.html', { root: 'client/dist' });
+  });
+  
+  // Serve dashboard page
+  app.get('/dashboard', (_req, res) => {
+    res.sendFile('dashboard.html', { root: 'client/dist' });
+  });
+  
+  // Serve login page for root and other routes
+  app.get("*", (_req, res) => {
+    res.sendFile('index.html', { root: 'client/dist' });
   });
 
-  // Serve index.html for root route
-  app.get("/", (req, res) => {
-    const indexPath = path.join(__dirname, '../client/dist/index.html');
-    res.sendFile(indexPath, (err) => {
-      if (err) {
-        res.json({ 
-          message: "Warehouse Management System API", 
-          status: "Server running on Render",
-          version: "1.0.0",
-          note: "Frontend build not available",
-          endpoints: {
-            auth: "/api/auth",
-            inventory: "/api/inventory", 
-            bom: "/api/bom",
-            warehouse: "/api/warehouse",
-            users: "/api/users",
-            workdiary: "/api/work-diary",
-            files: "/api/files"
-          }
-        });
-      }
-    });
-  });
-
-  // API 404 handler
-  app.get("/api/*", (req, res) => {
-    res.status(404).json({ message: "API endpoint not found" });
-  });
-
-  // Use Render's PORT environment variable or fallback to 5000
+  // Use Railway's PORT environment variable or fallback to 5000
   const port = process.env.PORT || 5000;
   server.listen({
     port,
