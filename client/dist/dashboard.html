@@ -5,22 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>창고 물품 재고 관리시스템</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#6366f1',
-                        secondary: '#f59e0b',
-                        success: '#10b981',
-                        danger: '#ef4444',
-                        warning: '#f59e0b',
-                        info: '#3b82f6'
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-gradient-to-br from-purple-400 via-blue-500 to-blue-600 min-h-screen">
     <!-- Navigation -->
@@ -47,101 +31,47 @@
     </nav>
 
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <!-- Dashboard Header -->
-        <div class="mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- Stats Cards -->
-                <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-6 text-white">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-white/80 text-sm">총 재고량 (ea)</p>
-                            <p class="text-3xl font-bold mt-1">709,060</p>
-                        </div>
-                        <div class="bg-green-500/30 p-2 rounded-lg">
-                            <span class="text-2xl">📊</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-6 text-white">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-white/80 text-sm">재고 부족 물품 수</p>
-                            <p class="text-3xl font-bold mt-1">147</p>
-                        </div>
-                        <div class="bg-yellow-500/30 p-2 rounded-lg">
-                            <span class="text-2xl">⚠️</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-6 text-white">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-white/80 text-sm">부족 물품 (콜라아식아 상세보기)</p>
-                            <p class="text-3xl font-bold mt-1 text-red-400">0 ⚠️</p>
-                        </div>
-                        <div class="bg-red-500/30 p-2 rounded-lg">
-                            <span class="text-2xl">🚨</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-6 text-white">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-white/80 text-sm">창고 구역</p>
-                            <p class="text-3xl font-bold mt-1">144</p>
-                        </div>
-                        <div class="bg-blue-500/30 p-2 rounded-lg">
-                            <span class="text-2xl">🏪</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Main Navigation Buttons -->
         <div class="mb-8">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                <button onclick="openTab('inventory')" class="bg-cyan-500 hover:bg-cyan-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <button onclick="window.location.href='/app'" class="bg-cyan-500 hover:bg-cyan-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
                     <div class="text-2xl mb-2">🗂️</div>
-                    <div class="text-sm font-medium">실시간으로 처재 확인</div>
+                    <div class="text-sm font-medium">실시간 재고 확인</div>
                 </button>
                 
-                <button onclick="openTab('transactions')" class="bg-amber-500 hover:bg-amber-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <button onclick="window.location.href='/app'" class="bg-amber-500 hover:bg-amber-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
                     <div class="text-2xl mb-2">📋</div>
-                    <div class="text-sm font-medium">재고관리</div>
+                    <div class="text-sm font-medium">재고 관리</div>
                 </button>
                 
-                <button onclick="openTab('inbound')" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <button onclick="window.location.href='/app'" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
                     <div class="text-2xl mb-2">📥</div>
-                    <div class="text-sm font-medium">입고관리</div>
+                    <div class="text-sm font-medium">입고 관리</div>
                 </button>
                 
-                <button onclick="openTab('outbound')" class="bg-red-500 hover:bg-red-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <button onclick="window.location.href='/app'" class="bg-red-500 hover:bg-red-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
                     <div class="text-2xl mb-2">📤</div>
-                    <div class="text-sm font-medium">출고관리</div>
+                    <div class="text-sm font-medium">출고 관리</div>
                 </button>
                 
-                <button onclick="openTab('bom')" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <button onclick="window.location.href='/app'" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
                     <div class="text-2xl mb-2">📄</div>
-                    <div class="text-sm font-medium">이동관리</div>
+                    <div class="text-sm font-medium">BOM 체커</div>
                 </button>
                 
-                <button onclick="openTab('warehouse')" class="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <button onclick="window.location.href='/app'" class="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
                     <div class="text-2xl mb-2">📦</div>
-                    <div class="text-sm font-medium">창고관리</div>
+                    <div class="text-sm font-medium">창고 관리</div>
                 </button>
                 
-                <button onclick="openTab('adjustment')" class="bg-pink-500 hover:bg-pink-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
-                    <div class="text-2xl mb-2">🔧</div>
-                    <div class="text-sm font-medium">창고 구조 관리</div>
-                </button>
-                
-                <button onclick="openTab('reports')" class="bg-indigo-500 hover:bg-indigo-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <button onclick="window.location.href='/app'" class="bg-pink-500 hover:bg-pink-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
                     <div class="text-2xl mb-2">📊</div>
-                    <div class="text-sm font-medium">예외관리</div>
+                    <div class="text-sm font-medium">엑셀 관리</div>
+                </button>
+                
+                <button onclick="window.location.href='/app'" class="bg-indigo-500 hover:bg-indigo-600 text-white p-4 rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                    <div class="text-2xl mb-2">📈</div>
+                    <div class="text-sm font-medium">보고서</div>
                 </button>
             </div>
         </div>
@@ -149,727 +79,77 @@
         <!-- Secondary Navigation -->
         <div class="mb-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button onclick="openTab('workdiary')" class="bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-4 rounded-xl transition-all">
+                <button onclick="window.location.href='/app'" class="bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-4 rounded-xl transition-all">
                     <div class="flex items-center justify-center space-x-2">
                         <span class="text-xl">📝</span>
                         <span class="font-medium">업무일지</span>
                     </div>
                 </button>
                 
-                <button onclick="openTab('users')" class="bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-4 rounded-xl transition-all">
+                <button onclick="window.location.href='/app'" class="bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-4 rounded-xl transition-all">
                     <div class="flex items-center justify-center space-x-2">
                         <span class="text-xl">👥</span>
                         <span class="font-medium">사용자 관리</span>
                     </div>
                 </button>
                 
-                <button onclick="openTab('files')" class="bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-4 rounded-xl transition-all">
+                <button onclick="window.location.href='/app'" class="bg-white/20 backdrop-blur-lg hover:bg-white/30 text-white p-4 rounded-xl transition-all">
                     <div class="flex items-center justify-center space-x-2">
                         <span class="text-xl">📁</span>
                         <span class="font-medium">파일 관리</span>
                     </div>
-                </button>
-            </div>
-        </div>
-
-        <!-- Smart Settings Panel -->
-        <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-6 mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-white flex items-center">
-                    <span class="text-2xl mr-2">⚙️</span>
-                    실시가이드볼 자재 확인
-                </h3>
-                <button onclick="openSettings()" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors">
-                    <span class="text-lg">⚙️</span>
-                </button>
-            </div>
-            
-            <div class="mb-4">
-                <h4 class="text-white/90 font-medium mb-2">실시가이드 설명</h4>
-                <select class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/30">
-                    <option value="">실시가이드를 선택하거나 검색하세요...</option>
-                </select>
+                </button>  
             </div>
         </div>
 
         <!-- Main Content Area -->
         <div id="main-content" class="bg-white/20 backdrop-blur-lg rounded-2xl p-8">
-            <!-- Inventory Tab Content (Default) -->
-            <div class="text-white">
-                <h2 class="text-2xl font-bold mb-6 flex items-center">
-                    <span class="text-3xl mr-3">📦</span>
-                    실시간 재고 현황
-                </h2>
-                
-                <div class="mb-6">
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <input type="text" placeholder="제품코드 또는 제품명 검색..." 
-                               class="bg-white/10 border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-2 flex-1 min-w-64">
-                        <select class="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2">
-                            <option value="">전체 카테고리</option>
-                            <option value="전자부품">전자부품</option>
-                            <option value="기계부품">기계부품</option>
-                        </select>
-                        <button onclick="searchInventory()" class="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-lg transition-colors">검색</button>
-                    </div>
-                </div>
-
-                <div class="bg-white/10 rounded-xl overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead class="bg-white/20">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">제품코드</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">제품명</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">카테고리</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">재고</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">위치</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">상태</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/10" id="inventory-table-body">
-                                <tr class="hover:bg-white/5">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">ITEM001</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">샘플 아이템 1</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">전자부품</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span class="text-green-400 font-bold">100 ea</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">A-1-01</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span class="bg-green-500/30 text-green-200 px-2 py-1 rounded text-xs">정상</span>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-white/5">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">ITEM002</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">샘플 아이템 2</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">기계부품</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span class="text-green-400 font-bold">50 ea</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">B-2-03</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span class="bg-green-500/30 text-green-200 px-2 py-1 rounded text-xs">정상</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="text-center text-white">
+                <div class="text-6xl mb-4">📦</div>
+                <h2 class="text-2xl font-bold mb-4">창고 관리 시스템</h2>
+                <p class="text-white/80 mb-6">위의 메뉴를 선택하여 React 기반 전체 기능을 이용하시기 바랍니다.</p>
+                <div class="bg-green-500/20 border border-green-400 rounded-lg p-4 mb-4">
+                    <p class="text-green-200 font-semibold">🚀 모든 메뉴가 React 앱으로 연결됩니다</p>
+                    <p class="text-green-300 text-sm">엑셀 업로드, BOM 체커, 보고서 등 모든 기능이 정상 작동합니다</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentSessionId = null;
+        let currentSessionId = localStorage.getItem('sessionId');
 
-        // 기본 탭 기능
-        function openTab(tabName) {
-            const content = document.getElementById('main-content');
-            
-            switch(tabName) {
-                case 'inventory':
-                    loadInventoryTab();
-                    break;
-                case 'transactions':
-                    loadTransactionsTab();
-                    break;
-                case 'inbound':
-                    loadInboundTab();
-                    break;
-                case 'outbound':
-                    loadOutboundTab();
-                    break;
-                case 'workdiary':
-                    loadWorkDiaryTab();
-                    break;
-                case 'users':
-                    loadUsersTab();
-                    break;
-                default:
-                    content.innerHTML = `
-                        <div class="text-center text-white">
-                            <div class="text-6xl mb-4">🚧</div>
-                            <h2 class="text-2xl font-bold mb-4">${getTabTitle(tabName)} 기능</h2>
-                            <p class="text-white/80">이 기능은 곧 활성화될 예정입니다.</p>
-                        </div>
-                    `;
-            }
-        }
-
-        function getTabTitle(tabName) {
-            const titles = {
-                'bom': 'BOM 관리',
-                'warehouse': '창고 관리',
-                'adjustment': '재고 조정',
-                'reports': '보고서',
-                'files': '파일 관리'
-            };
-            return titles[tabName] || tabName;
-        }
-
-        function loadInventoryTab() {
-            const content = document.getElementById('main-content');
-            content.innerHTML = `
-                <div class="text-white">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center">
-                        <span class="text-3xl mr-3">📦</span>
-                        실시간 재고 현황
-                    </h2>
-                    
-                    <div class="mb-6">
-                        <div class="flex flex-wrap gap-4 mb-4">
-                            <input type="text" id="search-input" placeholder="제품코드 또는 제품명 검색..." 
-                                   class="bg-white/10 border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-2 flex-1 min-w-64">
-                            <select id="category-filter" class="bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2">
-                                <option value="">전체 카테고리</option>
-                                <option value="전자부품">전자부품</option>
-                                <option value="기계부품">기계부품</option>
-                            </select>
-                            <button onclick="searchInventory()" class="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-lg transition-colors">검색</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-white/10 rounded-xl overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-white/20">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">제품코드</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">제품명</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">카테고리</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">재고</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">위치</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">상태</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-white/10" id="inventory-table-body">
-                                    <tr>
-                                        <td colspan="6" class="px-6 py-4 text-center text-white/60">
-                                            <div class="flex items-center justify-center">
-                                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                                                재고 데이터를 불러오는 중...
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // 재고 데이터 로드
-            setTimeout(loadInventoryData, 500);
-        }
-
-        function loadTransactionsTab() {
-            const content = document.getElementById('main-content');
-            content.innerHTML = `
-                <div class="text-white">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center">
-                        <span class="text-3xl mr-3">📋</span>
-                        재고 이동 내역
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                        <button onclick="showTransactionForm('inbound')" class="bg-green-500 hover:bg-green-600 p-4 rounded-xl transition-colors">
-                            <div class="text-2xl mb-2">📥</div>
-                            <div class="font-medium">입고 등록</div>
-                        </button>
-                        <button onclick="showTransactionForm('outbound')" class="bg-red-500 hover:bg-red-600 p-4 rounded-xl transition-colors">
-                            <div class="text-2xl mb-2">📤</div>
-                            <div class="font-medium">출고 등록</div>
-                        </button>
-                        <button onclick="showTransactionForm('move')" class="bg-blue-500 hover:bg-blue-600 p-4 rounded-xl transition-colors">
-                            <div class="text-2xl mb-2">🔄</div>
-                            <div class="font-medium">이동 등록</div>
-                        </button>
-                        <button onclick="showTransactionForm('adjustment')" class="bg-yellow-500 hover:bg-yellow-600 p-4 rounded-xl transition-colors">
-                            <div class="text-2xl mb-2">⚖️</div>
-                            <div class="font-medium">재고 조정</div>
-                        </button>
-                    </div>
-
-                    <div class="bg-white/10 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-4">최근 이동 내역</h3>
-                        <div class="space-y-3" id="transaction-list">
-                            <div class="flex items-center justify-center py-8">
-                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                                <span class="text-white/60">거래 내역을 불러오는 중...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // 거래 내역 로드
-            setTimeout(loadTransactionData, 500);
-        }
-
-        function loadInboundTab() {
-            const content = document.getElementById('main-content');
-            content.innerHTML = `
-                <div class="text-white">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center">
-                        <span class="text-3xl mr-3">📥</span>
-                        입고 관리
-                    </h2>
-                    
-                    <div class="bg-white/10 rounded-xl p-6 mb-6">
-                        <h3 class="text-lg font-semibold mb-4">입고 등록</h3>
-                        <form id="inbound-form" class="space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">제품코드</label>
-                                    <input type="text" name="itemCode" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">제품명</label>
-                                    <input type="text" name="itemName" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">수량</label>
-                                    <input type="number" name="quantity" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">입고 위치</label>
-                                    <input type="text" name="toLocation" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-2">사유</label>
-                                <textarea name="reason" rows="3" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2"></textarea>
-                            </div>
-                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors">
-                                입고 등록
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            `;
-        }
-
-        function loadOutboundTab() {
-            const content = document.getElementById('main-content');
-            content.innerHTML = `
-                <div class="text-white">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center">
-                        <span class="text-3xl mr-3">📤</span>
-                        출고 관리
-                    </h2>
-                    
-                    <div class="bg-white/10 rounded-xl p-6 mb-6">
-                        <h3 class="text-lg font-semibold mb-4">출고 등록</h3>
-                        <form id="outbound-form" class="space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">제품코드</label>
-                                    <input type="text" name="itemCode" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">제품명</label>
-                                    <input type="text" name="itemName" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">수량</label>
-                                    <input type="number" name="quantity" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2" required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">출고 위치</label>
-                                    <input type="text" name="fromLocation" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-2">사유</label>
-                                <textarea name="reason" rows="3" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2"></textarea>
-                            </div>
-                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors">
-                                출고 등록
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            `;
-        }
-
-        function loadWorkDiaryTab() {
-            const content = document.getElementById('main-content');
-            content.innerHTML = `
-                <div class="text-white">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center">
-                        <span class="text-3xl mr-3">📝</span>
-                        업무일지 관리
-                    </h2>
-                    
-                    <div class="mb-6">
-                        <button onclick="showWorkDiaryForm()" class="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl transition-colors">
-                            <span class="text-xl mr-2">➕</span>
-                            새 업무일지 작성
-                        </button>
-                    </div>
-
-                    <div class="bg-white/10 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-4">최근 업무일지</h3>
-                        <div class="space-y-4" id="workdiary-list">
-                            <div class="flex items-center justify-center py-8">
-                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                                <span class="text-white/60">업무일지를 불러오는 중...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // 업무일지 데이터 로드
-            setTimeout(loadWorkDiaryData, 500);
-        }
-
-        function loadUsersTab() {
-            const content = document.getElementById('main-content');
-            content.innerHTML = `
-                <div class="text-white">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center">
-                        <span class="text-3xl mr-3">👥</span>
-                        사용자 관리
-                    </h2>
-                    
-                    <div class="mb-6">
-                        <button onclick="showUserForm()" class="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-xl transition-colors">
-                            <span class="text-xl mr-2">➕</span>
-                            새 사용자 추가
-                        </button>
-                    </div>
-
-                    <div class="bg-white/10 rounded-xl p-6">
-                        <h3 class="text-lg font-semibold mb-4">사용자 목록</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-white/20">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">사용자명</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">역할</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">부서</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">직급</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-white/80 uppercase tracking-wider">가입일</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-white/10" id="users-table-body">
-                                    <tr class="hover:bg-white/5">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">admin</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <span class="bg-red-500/30 text-red-200 px-2 py-1 rounded text-xs">관리자</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">관리부</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">관리자</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">2025-08-02</td>
-                                    </tr>
-                                    <tr class="hover:bg-white/5">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">viewer</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            <span class="bg-green-500/30 text-green-200 px-2 py-1 rounded text-xs">조회자</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">일반부</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">사원</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">2025-08-02</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function openSettings() {
-            const content = document.getElementById('main-content');
-            content.innerHTML = `
-                <div class="text-white">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center">
-                        <span class="text-3xl mr-3">⚙️</span>
-                        시스템 설정
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white/10 rounded-xl p-6">
-                            <h3 class="text-lg font-semibold mb-4">알림 설정</h3>
-                            <div class="space-y-4">
-                                <label class="flex items-center">
-                                    <input type="checkbox" checked class="mr-3">
-                                    <span>재고 부족 알림</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" checked class="mr-3">
-                                    <span>입출고 알림</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" class="mr-3">
-                                    <span>음성 알림</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white/10 rounded-xl p-6">
-                            <h3 class="text-lg font-semibold mb-4">시스템 정보</h3>
-                            <div class="space-y-2 text-sm">
-                                <p>호스팅: Render (무료)</p>
-                                <p>데이터베이스: Supabase PostgreSQL</p>
-                                <p>소스코드: GitHub</p>
-                                <p>버전: 1.0.0</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // API 호출 함수들
-        async function loadInventoryData() {
-            try {
-                const response = await fetch('/api/inventory', {
-                    headers: getAuthHeaders()
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch inventory data');
-                }
-                
-                const data = await response.json();
-                
-                const tableBody = document.getElementById('inventory-table-body');
-                if (!tableBody) return;
-                
-                if (data.length === 0) {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-white/60">
-                                재고 데이터가 없습니다.
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-                
-                tableBody.innerHTML = data.map(item => `
-                    <tr class="hover:bg-white/5">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">${item.code}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">${item.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">${item.category}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <span class="${item.stock < item.minStock ? 'text-red-400' : 'text-green-400'} font-bold">
-                                ${item.stock} ${item.unit}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">${item.location || '-'}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            ${item.stock < item.minStock ? 
-                                '<span class="bg-red-500/30 text-red-200 px-2 py-1 rounded text-xs">부족</span>' : 
-                                '<span class="bg-green-500/30 text-green-200 px-2 py-1 rounded text-xs">정상</span>'
-                            }
-                        </td>
-                    </tr>
-                `).join('');
-            } catch (error) {
-                console.error('재고 데이터 로드 실패:', error);
-                const tableBody = document.getElementById('inventory-table-body');
-                if (tableBody) {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-red-400">
-                                데이터를 불러오는 중 오류가 발생했습니다.
-                            </td>
-                        </tr>
-                    `;
-                }
-            }
-        }
-
-        async function loadTransactionData() {
-            try {
-                const response = await fetch('/api/transactions', {
-                    headers: getAuthHeaders()
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch transaction data');
-                }
-                
-                const data = await response.json();
-                
-                const listElement = document.getElementById('transaction-list');
-                if (!listElement) return;
-                
-                if (data.length === 0) {
-                    listElement.innerHTML = `
-                        <div class="text-center text-white/60 py-8">
-                            거래 내역이 없습니다.
-                        </div>
-                    `;
-                    return;
-                }
-                
-                listElement.innerHTML = data.map(transaction => `
-                    <div class="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="font-medium">${transaction.itemName} (${transaction.itemCode})</div>
-                                <div class="text-sm text-white/70 mt-1">
-                                    ${getTransactionTypeIcon(transaction.type)} 
-                                    | 수량: ${transaction.quantity}
-                                </div>
-                                ${transaction.reason ? 
-                                    `<div class="text-xs text-white/50 mt-1">${transaction.reason}</div>` : ''
-                                }
-                            </div>
-                            <div class="text-right text-sm text-white/60">
-                                ${new Date(transaction.createdAt).toLocaleDateString('ko-KR')}
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('거래 내역 로드 실패:', error);
-                const listElement = document.getElementById('transaction-list');
-                if (listElement) {
-                    listElement.innerHTML = `
-                        <div class="text-center text-red-400 py-8">
-                            데이터를 불러오는 중 오류가 발생했습니다.
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        async function loadWorkDiaryData() {
-            try {
-                const response = await fetch('/api/work-diary', {
-                    headers: getAuthHeaders()
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch work diary data');
-                }
-                
-                const data = await response.json();
-                
-                const listElement = document.getElementById('workdiary-list');
-                if (!listElement) return;
-                
-                if (data.length === 0) {
-                    listElement.innerHTML = `
-                        <div class="text-center text-white/60 py-8">
-                            업무일지가 없습니다.
-                        </div>
-                    `;
-                    return;
-                }
-                
-                listElement.innerHTML = data.map(diary => `
-                    <div class="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <div class="font-medium">${diary.title}</div>
-                                <div class="text-sm text-white/70 mt-1">
-                                    <span class="bg-blue-500/30 text-blue-200 px-2 py-1 rounded text-xs mr-2">${diary.category}</span>
-                                    <span class="bg-${getPriorityColor(diary.priority)}-500/30 text-${getPriorityColor(diary.priority)}-200 px-2 py-1 rounded text-xs">
-                                        ${getPriorityText(diary.priority)}
-                                    </span>
-                                </div>
-                                <div class="text-sm text-white/60 mt-2 line-clamp-2">${diary.content}</div>
-                            </div>
-                            <div class="text-right text-sm text-white/60 ml-4">
-                                ${new Date(diary.workDate).toLocaleDateString('ko-KR')}
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('업무일지 로드 실패:', error);
-                const listElement = document.getElementById('workdiary-list');
-                if (listElement) {
-                    listElement.innerHTML = `
-                        <div class="text-center text-red-400 py-8">
-                            데이터를 불러오는 중 오류가 발생했습니다.
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        // 유틸리티 함수들
-        function getAuthHeaders() {
-            const headers = {
-                'Content-Type': 'application/json'
-            };
-            
-            if (currentSessionId) {
-                headers['Authorization'] = `Bearer ${currentSessionId}`;
-            }
-            
-            return headers;
-        }
-
-        function getTransactionTypeIcon(type) {
-            const icons = {
-                'inbound': '📥 입고',
-                'outbound': '📤 출고',
-                'move': '🔄 이동',
-                'adjustment': '⚖️ 조정'
-            };
-            return icons[type] || type;
-        }
-
-        function getPriorityColor(priority) {
-            const colors = {
-                'high': 'red',
-                'normal': 'green',
-                'low': 'yellow'
-            };
-            return colors[priority] || 'green';
-        }
-
-        function getPriorityText(priority) {
-            const texts = {
-                'high': '높음',
-                'normal': '보통',
-                'low': '낮음'
-            };
-            return texts[priority] || '보통';
-        }
-
-        function searchInventory() {
-            loadInventoryData();
-        }
-
-        // 로그아웃 함수
-        async function logout() {
-            try {
-                await fetch('/api/auth/logout', { 
-                    method: 'POST',
-                    headers: getAuthHeaders()
-                });
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!currentSessionId) {
                 window.location.href = '/';
-            } catch (error) {
-                console.error('로그아웃 오류:', error);
-                window.location.href = '/';
+                return;
             }
-        }
 
-        // 페이지 로드 시 초기화
-        document.addEventListener('DOMContentLoaded', () => {
-            // 세션 정보 가져오기
-            currentSessionId = localStorage.getItem('sessionId');
-            
-            // 기본 재고 탭 로드
-            loadInventoryTab();
-            
-            // 사용자 정보 업데이트
-            const username = localStorage.getItem('username') || 'admin';
-            const usernameElement = document.getElementById('username');
-            if (usernameElement) {
-                usernameElement.textContent = username;
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: { 'x-session-id': currentSessionId }
+                });
+                
+                if (response.ok) {
+                    const user = await response.json();
+                    document.getElementById('username').textContent = user.username;
+                } else {
+                    throw new Error('Authentication failed');
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+                localStorage.removeItem('sessionId');
+                window.location.href = '/';
             }
         });
+
+        function logout() {
+            localStorage.removeItem('sessionId');
+            localStorage.removeItem('username');
+            localStorage.removeItem('role');
+            window.location.href = '/';
+        }
     </script>
 </body>
 </html>
