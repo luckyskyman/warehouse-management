@@ -57,10 +57,14 @@
         try {
           currentUser = JSON.parse(savedUser);
           sessionId = savedSession;
+          console.log('Restoring saved session for user:', currentUser.username);
           showDashboard();
         } catch (e) {
+          console.log('Failed to restore session, clearing localStorage');
           localStorage.clear();
         }
+      } else {
+        console.log('No saved session found, showing login form');
       }
 
       document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -89,6 +93,7 @@
           localStorage.setItem('warehouse_user', JSON.stringify(data.user));
           localStorage.setItem('warehouse_session', data.sessionId);
           
+          console.log('Login successful, showing dashboard for:', data.user.username);
           showDashboard();
         } catch (error) {
           errorDiv.textContent = error.message;
