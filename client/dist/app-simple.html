@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>창고 물품 재고 관리시스템</title>
+    <link rel="stylesheet" crossorigin href="/assets/index-DXaLrMJa.css">
+    <style>
+      body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+      .login-container { max-width: 400px; margin: 100px auto; }
+      .login-form { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+      .form-group { margin-bottom: 20px; }
+      label { display: block; margin-bottom: 5px; font-weight: bold; }
+      input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+      button { width: 100%; padding: 12px; background: #7c3aed; color: white; border: none; border-radius: 4px; cursor: pointer; }
+      button:hover { background: #6d28d9; }
+      .error { color: red; margin-top: 10px; }
+      .dashboard { padding: 20px; }
+      .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; margin: -20px -20px 20px -20px; }
+      .tabs { display: flex; gap: 10px; margin: 20px 0; }
+      .tab { padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 4px; cursor: pointer; }
+      .tab.active { background: #7c3aed; color: white; }
+      .content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="login-container">
+        <div class="login-form">
+          <h2>창고 물품 재고 관리시스템</h2>
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="username">사용자명</label>
+              <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+              <label for="password">비밀번호</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">로그인</button>
+            <div id="error" class="error" style="display: none;"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentUser = null;
+      let sessionId = null;
+
+      // Check if already logged in
+      const savedUser = localStorage.getItem('warehouse_user');
+      const savedSession = localStorage.getItem('warehouse_session');
+      
+      if (savedUser && savedSession) {
+        try {
+          currentUser = JSON.parse(savedUser);
+          sessionId = savedSession;
+          showDashboard();
+        } catch (e) {
+          localStorage.clear();
+        }
+      }
+
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('error');
+        
+        try {
+          const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || '로그인 실패');
+          }
+          
+          const data = await response.json();
+          currentUser = data.user;
+          sessionId = data.sessionId;
+          
+          localStorage.setItem('warehouse_user', JSON.stringify(data.user));
+          localStorage.setItem('warehouse_session', data.sessionId);
+          
+          showDashboard();
+        } catch (error) {
+          errorDiv.textContent = error.message;
+          errorDiv.style.display = 'block';
+        }
+      });
+
+      function showDashboard() {
+        document.getElementById('root').innerHTML = `
+          <div class="dashboard">
+            <div class="header">
+              <h1>창고 물품 재고 관리시스템</h1>
+              <p>사용자: ${currentUser.username} (${currentUser.role === 'super_admin' ? '관리자' : '사용자'})</p>
+              <button onclick="logout()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer;">로그아웃</button>
+            </div>
+            
+            <div class="tabs">
+              <button class="tab active" onclick="switchTab('bom')">⚙️ BOM 체커</button>
+              <button class="tab" onclick="switchTab('inventory')">📦 재고관리</button>
+              <button class="tab" onclick="switchTab('transactions')">📥📤 입출고관리</button>
+              <button class="tab" onclick="switchTab('reports')">📊 보고서</button>
+            </div>
+            
+            <div class="content" id="content">
+              <h3>BOM 체커</h3>
+              <p>설치가이드별 자재 확인 기능입니다.</p>
+              <p>React 앱 로딩 문제가 해결되면 모든 기능을 사용할 수 있습니다.</p>
+              <div style="margin-top: 20px; padding: 15px; background: #fef3c7; border-radius: 6px;">
+                <strong>알림:</strong> 현재 임시 화면입니다. 전체 기능은 React 앱이 로드되면 사용 가능합니다.
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function switchTab(tab) {
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        const content = document.getElementById('content');
+        switch(tab) {
+          case 'bom':
+            content.innerHTML = '<h3>BOM 체커</h3><p>설치가이드별 자재 확인 기능</p>';
+            break;
+          case 'inventory':
+            content.innerHTML = '<h3>재고관리</h3><p>제품 재고 현황 및 관리</p>';
+            break;
+          case 'transactions':
+            content.innerHTML = '<h3>입출고관리</h3><p>제품 입고/출고 처리</p>';
+            break;
+          case 'reports':
+            content.innerHTML = '<h3>보고서</h3><p>재고 현황 및 분석 보고서</p>';
+            break;
+        }
+      }
+
+      function logout() {
+        localStorage.clear();
+        currentUser = null;
+        sessionId = null;
+        location.reload();
+      }
+    </script>
+  </body>
+</html>
