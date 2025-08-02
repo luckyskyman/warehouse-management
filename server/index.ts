@@ -110,6 +110,11 @@ app.use((req, res, next) => {
     res.sendFile('dashboard.html', { root: 'client/dist' });
   });
   
+  // Health check endpoint
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  });
+
   // Serve login page for root and other routes
   app.get("*", (_req, res) => {
     res.sendFile('index.html', { root: 'dist/public' });
@@ -123,5 +128,6 @@ app.use((req, res, next) => {
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    log(`Health check available at /health`);
   });
 })();
