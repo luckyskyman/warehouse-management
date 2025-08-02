@@ -17,7 +17,7 @@ Enterprise-grade warehouse management system with advanced file classification a
 - **Frontend**: React.js + TypeScript + Tailwind CSS
 - **Backend**: Node.js + Express
 - **Database**: PostgreSQL with Drizzle ORM
-- **Deployment**: Vercel + Supabase
+- **Deployment**: Render
 - **State Management**: React Query
 
 ## Quick Start
@@ -25,7 +25,7 @@ Enterprise-grade warehouse management system with advanced file classification a
 ### Prerequisites
 
 - Node.js 18+ 
-- PostgreSQL database (Supabase recommended)
+- PostgreSQL database
 
 ### Installation
 
@@ -58,23 +58,21 @@ npm run dev
 
 ## Deployment
 
-This project is configured for deployment on Vercel with Supabase:
+This project is configured for deployment on Render:
 
 1. Push code to GitHub
-2. Connect repository to Vercel
-3. Set environment variables in Vercel
+2. Connect repository to Render
+3. Set environment variables in Render
 4. Deploy
 
 ## Environment Variables
 
 ```env
 DATABASE_URL=postgresql://...
-SUPABASE_URL=https://...
-SUPABASE_ANON_KEY=eyJ...
 SESSION_SECRET=your-secret-key
 NODE_ENV=production
 ```
 
 ## License
 
-MIT License# Force rebuild - Sat Aug  2 09:46:43 AM UTC 2025
+MIT License
