@@ -80,20 +80,20 @@ export const getQueryFn: <T>(options: {
     });
 
     if (res.status === 401) {
-      console.log('401 Unauthorized - clearing auth data');
+      console.log('Query 401 error, clearing auth state');
+      localStorage.removeItem('warehouse_session');
       localStorage.removeItem('sessionId');
+      localStorage.removeItem('warehouse_user');
       localStorage.removeItem('username');
       localStorage.removeItem('role');
-      localStorage.removeItem('warehouse_user');
-      localStorage.removeItem('warehouse_session');
       
       if (unauthorizedBehavior === "returnNull") {
         return null;
+      } else {
+        // 로그인 페이지로 리다이렉트
+        window.location.href = '/';
+        throw new Error("Unauthorized");
       }
-      
-      // Reload page to show login form
-      window.location.reload();
-      return;
     }
 
     await throwIfResNotOk(res);
