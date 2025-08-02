@@ -67,62 +67,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/login", async (req, res) => {
     try {
       const { username, password } = req.body;
-      const user = await simpleStorage.getUserByUsername(username);
+      console.log('Login attempt:', { username });
+      
+      const user = await storage.getUserByUsername(username);
+      console.log('User found:', user ? { id: user.id, username: user.username, role: user.role } : 'No user found');
 
       if (!user || user.password !== password) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        console.log('Login failed: Invalid credentials');
+        return res.status(401).json({ success: false, message: "Invalid credentials" });
       }
 
-      // Generate session ID
-      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      sessions.set(sessionId, user);
-      
-      console.log('Login successful:', { 
-        userId: user.id, 
-        username: user.username, 
+      // Generate session ID and store session
+      const sessionId = `session_${Date.now()}${Math.random().toString(36).substr(2, 9)}`;
+      sessions.set(sessionId, {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        loginTime: new Date()
+      });
+
+      console.log('Login successful:', {
+        userId: user.id,
+        username: user.username,
         role: user.role,
         sessionId: sessionId.substring(0, 20) + '...',
         totalSessions: sessions.size
       });
 
-      res.json({ 
-        user: { 
-          id: user.id, 
-          username: user.username, 
+      // Return success response
+      res.json({
+        success: true,
+        sessionId,
+        user: {
+          id: user.id,
+          username: user.username,
           role: user.role,
           department: user.department,
-          position: user.position,
-          isManager: user.isManager,
-          // 권한 정보 포함
-          canUploadBom: user.canUploadBom,
-          canUploadMaster: user.canUploadMaster,
-          canUploadInventoryAdd: user.canUploadInventoryAdd,
-          canUploadInventorySync: user.canUploadInventorySync,
-          canAccessExcelManagement: user.canAccessExcelManagement,
-          canBackupData: user.canBackupData,
-          canRestoreData: user.canRestoreData,
-          canResetData: user.canResetData,
-          canManageUsers: user.canManageUsers,
-          canManagePermissions: user.canManagePermissions,
-          canDownloadInventory: user.canDownloadInventory,
-          canDownloadTransactions: user.canDownloadTransactions,
-          canDownloadBom: user.canDownloadBom,
-          canDownloadAll: user.canDownloadAll,
-          canManageInventory: user.canManageInventory,
-          canProcessTransactions: user.canProcessTransactions,
-          canManageBom: user.canManageBom,
-          canManageWarehouse: user.canManageWarehouse,
-          canProcessExchange: user.canProcessExchange,
-          canCreateDiary: user.canCreateDiary,
-          canEditDiary: user.canEditDiary,
-          canDeleteDiary: user.canDeleteDiary,
-          canViewReports: user.canViewReports,
-          canManageLocation: user.canManageLocation,
-        },
-        sessionId: sessionId
+          position: user.position
+        }
       });
-    } catch (error) {
-      res.status(500).json({ message: "Server error" });
+    } catch (error: any) {
+      console.error('Login error:', error);
+      res.status(500).json({ success: false, message: "Server error" });
     }
   });
 
