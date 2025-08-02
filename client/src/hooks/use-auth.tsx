@@ -97,17 +97,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const savedUser = localStorage.getItem('warehouse_user');
     const savedSession = localStorage.getItem('warehouse_session') || localStorage.getItem('sessionId');
     
-    console.log('AuthProvider useEffect:', { savedUser: !!savedUser, savedSession: !!savedSession });
+    console.log('AuthProvider useEffect:', { 
+      savedUser: !!savedUser, 
+      savedSession: !!savedSession,
+      sessionId: savedSession ? savedSession.substring(0, 20) + '...' : 'none'
+    });
     
     if (savedUser && savedSession) {
       try {
         const userData = JSON.parse(savedUser);
-        console.log('Setting user from localStorage:', userData);
-        setUser(userData);
-        setSessionId(savedSession);
+        console.log('Attempting to restore session for user:', userData.username);
         
-        // 세션 복원 후 바로 대시보드 표시 (검증 없이)
-        console.log('Session restored successfully, user ready for dashboard');
+        // Verify session with server before setting auth state
+        fetch('/api/auth/me', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${savedSession}`,
+            'X-Session-Id': savedSession,
+            'SessionId': savedSession,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          console.log('Session verification response:', response.status);
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error(`Session verification failed: ${response.status}`);
+          }
+        })
+        .then(serverUserData => {
+          console.log('Session verified successfully, setting auth state:', serverUserData.username);
+          setUser(serverUserData);
+          setSessionId(savedSession);
+          // Update localStorage with fresh data
+          localStorage.setItem('warehouse_user', JSON.stringify(serverUserData));
+        })
+        .catch(error => {
+          console.log('Session verification failed, clearing auth state:', error.message);
+          localStorage.removeItem('warehouse_user');
+          localStorage.removeItem('sessionId');
+          localStorage.removeItem('warehouse_session');
+          localStorage.removeItem('username');
+          localStorage.removeItem('role');
+          setUser(null);
+          setSessionId(null);
+        });
       } catch (error) {
         console.error('localStorage 파싱 에러:', error);
         logout();
