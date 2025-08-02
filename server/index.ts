@@ -77,9 +77,9 @@ app.use((req, res, next) => {
   // Serve static files
   app.use(express.static('client/dist'));
   
-  // Serve React app for /app routes
+  // Serve React app for /app routes (temporary fix with simple dashboard)
   app.get('/app*', (_req, res) => {
-    res.sendFile('app.html', { root: 'client/dist' });
+    res.sendFile('app-simple.html', { root: 'client/dist' });
   });
   
   // Serve dashboard page
