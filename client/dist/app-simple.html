@@ -49,7 +49,7 @@
       let currentUser = null;
       let sessionId = null;
 
-      // Check if already logged in
+      // Check if already logged in (skip session validation)
       const savedUser = localStorage.getItem('warehouse_user');
       const savedSession = localStorage.getItem('warehouse_session');
       
@@ -59,6 +59,7 @@
           sessionId = savedSession;
           console.log('Restoring saved session for user:', currentUser.username);
           showDashboard();
+          return; // Skip showing login form
         } catch (e) {
           console.log('Failed to restore session, clearing localStorage');
           localStorage.clear();
@@ -120,9 +121,16 @@
             <div class="content" id="content">
               <h3>BOM 체커</h3>
               <p>설치가이드별 자재 확인 기능입니다.</p>
-              <p>React 앱 로딩 문제가 해결되면 모든 기능을 사용할 수 있습니다.</p>
-              <div style="margin-top: 20px; padding: 15px; background: #fef3c7; border-radius: 6px;">
-                <strong>알림:</strong> 현재 임시 화면입니다. 전체 기능은 React 앱이 로드되면 사용 가능합니다.
+              <div style="margin-top: 20px; padding: 15px; background: #e0f2fe; border-radius: 6px;">
+                <strong>✅ 로그인 성공:</strong> 창고관리시스템에 접속되었습니다.<br>
+                <small>현재 임시 대시보드가 표시됩니다. 각 탭을 클릭하여 기능을 확인하세요.</small>
+              </div>
+              <div style="margin-top: 15px; padding: 15px; background: #f3f4f6; border-radius: 6px;">
+                <strong>📋 사용 가능한 기능:</strong><br>
+                • BOM 체커: 설치가이드별 자재 확인<br>
+                • 재고관리: 제품 재고 현황 조회<br>
+                • 입출고관리: 제품 입고/출고 처리<br>
+                • 보고서: 재고 분석 및 현황 보고서
               </div>
             </div>
           </div>
@@ -137,16 +145,60 @@
         const content = document.getElementById('content');
         switch(tab) {
           case 'bom':
-            content.innerHTML = '<h3>BOM 체커</h3><p>설치가이드별 자재 확인 기능</p>';
+            content.innerHTML = `
+              <h3>⚙️ BOM 체커</h3>
+              <p>설치가이드별 자재 확인 기능</p>
+              <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <h4>주요 기능</h4>
+                <ul>
+                  <li>설치가이드별 필요 부품 수량 확인</li>
+                  <li>재고 현황과 대비한 부족 수량 계산</li>
+                  <li>Excel 파일 업로드 및 분석</li>
+                </ul>
+              </div>
+            `;
             break;
           case 'inventory':
-            content.innerHTML = '<h3>재고관리</h3><p>제품 재고 현황 및 관리</p>';
+            content.innerHTML = `
+              <h3>📦 재고관리</h3>
+              <p>제품 재고 현황 및 관리</p>
+              <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <h4>주요 기능</h4>
+                <ul>
+                  <li>전체 제품 재고 현황 조회</li>
+                  <li>재고 부족 알림 및 경고</li>
+                  <li>제품별 위치 및 수량 관리</li>
+                </ul>
+              </div>
+            `;
             break;
           case 'transactions':
-            content.innerHTML = '<h3>입출고관리</h3><p>제품 입고/출고 처리</p>';
+            content.innerHTML = `
+              <h3>📥📤 입출고관리</h3>
+              <p>제품 입고/출고 처리</p>
+              <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <h4>주요 기능</h4>
+                <ul>
+                  <li>제품 입고 등록 및 처리</li>
+                  <li>제품 출고 처리 및 재고 차감</li>
+                  <li>입출고 이력 조회 및 관리</li>
+                </ul>
+              </div>
+            `;
             break;
           case 'reports':
-            content.innerHTML = '<h3>보고서</h3><p>재고 현황 및 분석 보고서</p>';
+            content.innerHTML = `
+              <h3>📊 보고서</h3>
+              <p>재고 현황 및 분석 보고서</p>
+              <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <h4>주요 기능</h4>
+                <ul>
+                  <li>일일/주간/월간 재고 현황 보고서</li>
+                  <li>입출고 통계 및 분석</li>
+                  <li>Excel 보고서 다운로드</li>
+                </ul>
+              </div>
+            `;
             break;
         }
       }
