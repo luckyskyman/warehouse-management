@@ -79,12 +79,17 @@ app.use((req, res, next) => {
   
   // Serve temporary working dashboard for /app routes
   app.get('/app*', (_req, res) => {
-    res.sendFile('app-simple.html', { root: 'client/dist' });
+    res.sendFile('warehouse-simple.html', { root: 'client/dist' });
   });
   
   // Also serve it at /simple for testing
   app.get('/simple', (_req, res) => {
-    res.sendFile('app-simple.html', { root: 'client/dist' });
+    res.sendFile('warehouse-simple.html', { root: 'client/dist' });
+  });
+  
+  // Backup route
+  app.get('/warehouse', (_req, res) => {
+    res.sendFile('warehouse-simple.html', { root: 'client/dist' });
   });
   
   // Serve dashboard page
