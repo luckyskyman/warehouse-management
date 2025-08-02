@@ -1665,8 +1665,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = sessions.get(sessionId);
       console.log('Auth me success:', { userId: user.id, username: user.username });
       res.json(user);
-      
-      res.json(user);
     } catch (error) {
       console.error("사용자 정보 조회 오류:", error);
       res.status(500).json({ message: "서버 오류가 발생했습니다." });
